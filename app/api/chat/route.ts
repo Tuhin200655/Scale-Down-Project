@@ -3,6 +3,13 @@ import { openai, GEMINI_MODEL } from '@/lib/api/openai';
 
 export async function POST(req: NextRequest) {
     try {
+        if (!process.env.GEMINI_API_KEY) {
+            return NextResponse.json(
+                { error: 'Server misconfigured', details: 'GEMINI_API_KEY is missing' },
+                { status: 500 }
+            );
+        }
+
         const { message } = await req.json();
 
         if (!message) {

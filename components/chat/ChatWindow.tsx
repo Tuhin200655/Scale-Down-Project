@@ -35,7 +35,17 @@ export default function ChatWindow() {
                 body: JSON.stringify({ message: content }),
             });
 
-            if (!response.ok) throw new Error('Failed to fetch response');
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorMessage = 'Failed to fetch response';
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    errorMessage = errorJson.details || errorJson.error || errorMessage;
+                } catch {
+                    errorMessage = errorText || errorMessage;
+                }
+                throw new Error(errorMessage);
+            }
 
             const data = await response.json();
 
