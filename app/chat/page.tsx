@@ -4,6 +4,8 @@ import { MobileSidebar } from '@/components/chat/MobileSidebar';
 import { createClient } from '@/lib/supabase/server';
 import { LoginCard } from '@/components/auth/LoginCard';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ChatPage() {
     let user = null;
     let envError = false;
