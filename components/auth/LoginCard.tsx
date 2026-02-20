@@ -31,7 +31,7 @@ export function LoginCard() {
                         Welcome to Gadget Bot
                     </CardTitle>
                     <CardDescription className="text-zinc-500 dark:text-zinc-400">
-                        Sign in to save your conversations and access premium AI features.
+                        Sign In to continue
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
