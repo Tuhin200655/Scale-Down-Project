@@ -5,8 +5,37 @@ import { createClient } from '@/lib/supabase/server';
 import { LoginCard } from '@/components/auth/LoginCard';
 
 export default async function ChatPage() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    let user = null;
+    let envError = false;
+
+    try {
+        const supabase = await createClient();
+        const { data } = await supabase.auth.getUser();
+        user = data.user;
+    } catch (e) {
+        console.error('Supabase connection failed (likely missing env vars on Vercel):', e);
+        envError = true;
+    }
+
+    if (envError) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-zinc-950 text-white p-4 text-center">
+                <div className="max-w-md space-y-4">
+                    <h1 className="text-2xl font-bold text-red-500">Deployment Error</h1>
+                    <p className="text-zinc-400">
+                        The application is missing required environment variables to connect to Supabase.
+                    </p>
+                    <p className="text-zinc-400 text-sm bg-zinc-900 p-4 rounded-lg text-left font-mono">
+                        Make sure to add the following to your Vercel project settings under Environment Variables:
+                        <br /><br />
+                        1. NEXT_PUBLIC_SUPABASE_URL<br />
+                        2. NEXT_PUBLIC_SUPABASE_ANON_KEY<br />
+                        3. GEMINI_API_KEY
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="relative flex h-screen w-full overflow-hidden bg-linear-to-br from-[#7a00cc] via-[#3300b3] to-[#000080]">
